@@ -26,22 +26,24 @@ namespace Taco.Services.Restaurant
 
             if (!string.IsNullOrEmpty(filter.Location))
             {
-                restaurantList = restaurantList.Where(x => x.Suburb.Contains(filter.Location) || x.City.Contains(filter.Location)).ToList();
+                filter.Location = filter.Location.ToLower();
+                restaurantList = restaurantList.Where(x => x.Suburb.ToLower().Contains(filter.Location) || x.City.ToLower().Contains(filter.Location)).ToList();
             }
 
             if (!string.IsNullOrEmpty(filter.Keyword))
             {
-                restaurantList = restaurantList.Where(r => r.Categories.Any(c => c.Name.Contains(filter.Keyword)) || r.Categories.Any(c => c.MenuItems.Any(m => m.Name.Contains(filter.Keyword)))).ToList();
+                filter.Keyword = filter.Keyword.ToLower();
+                restaurantList = restaurantList.Where(r => r.Categories.Any(c => c.Name.ToLower().Contains(filter.Keyword)) || r.Categories.Any(c => c.MenuItems.Any(m => m.Name.ToLower().Contains(filter.Keyword)))).ToList();
 
                 foreach (var restaurant in restaurantList)
                 {
-                    restaurant.Categories = restaurant.Categories.Where(x => x.Name.Contains(filter.Keyword) || x.MenuItems.Any(m => m.Name.Contains(filter.Keyword))).ToList();
+                    restaurant.Categories = restaurant.Categories.Where(x => x.Name.ToLower().Contains(filter.Keyword) || x.MenuItems.Any(m => m.Name.ToLower().Contains(filter.Keyword))).ToList();
 
                     foreach (var category in restaurant.Categories)
                     {
-                        if (!category.Name.Contains(filter.Keyword))
+                        if (!category.Name.ToLower().Contains(filter.Keyword))
                         {
-                            category.MenuItems = category.MenuItems.Where(x => x.Name.Contains(filter.Keyword)).ToList();
+                            category.MenuItems = category.MenuItems.Where(x => x.Name.ToLower().Contains(filter.Keyword)).ToList();
                         }
                     }
                 }
