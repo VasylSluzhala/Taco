@@ -1,13 +1,23 @@
 import React from 'react';
 import { Restaurant } from '../../models/restaurant';
-import { Avatar, Row, Col, Checkbox } from 'antd';
+import { Image, Row, Col, Checkbox, Form } from 'antd';
 import './index.css';
 
-const RestaurantItem = ({ item }: { item: Restaurant }) => {
+interface IRestaurantItemProps {
+    item: Restaurant;
+    onMenuItemCheck: (isChecked: boolean, itemPrice: number) => void;
+}
+
+const RestaurantItem = ({ item, onMenuItemCheck }: IRestaurantItemProps) => {
     return (
         <Row gutter={[16, 16]} className="restaurant-item-container">
             <Col>
-                <Avatar shape="square">{"IMG"}</Avatar>
+                <Image
+                    height={100}
+                    width={150}
+                    preview={false}
+                    src={item.logoPath}
+                />
             </Col>
             <Col span={22}>
                 <Row gutter={[16, 16]}>
@@ -25,7 +35,13 @@ const RestaurantItem = ({ item }: { item: Restaurant }) => {
                                     {cat.menuItems.map(mi => {
                                         return (
                                             <Col key={mi.id} span={24}>
-                                                <Checkbox value={mi.id} >{mi.name} - R{mi.price}</Checkbox>
+                                                <Form.Item
+                                                    name={mi.id}
+                                                    valuePropName="checked"
+                                                    className="menu-items-form-item"
+                                                >
+                                                    <Checkbox onChange={(event) => onMenuItemCheck(event.target.checked, mi.price)}>{mi.name} - R{mi.price}</Checkbox>
+                                                </Form.Item>
                                             </Col>
                                         );
                                     })}

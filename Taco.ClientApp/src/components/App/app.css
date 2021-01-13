@@ -1,8 +1,18 @@
 .app {
-  margin: 0 50px;
-  margin-top: 20px;
+  margin: 20px 50px;
 }
 
 .search-box {
   margin-bottom: 20px;
+}
+
+.order-button {
+  margin-bottom: 20px;
+}
+
+.button-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
 }

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './app.css';
-import { Input, Form, Button } from 'antd';
+import { Input, Form, Button, Row, Modal, message } from 'antd';
 import { getRestaurantsByFilter } from "../../services/restaurant-service";
+import { createOrder } from "../../services/order-service";
 import { Restaurant } from '../../models/restaurant';
 import RestaurantItem from '../restaurant';
 
 const App = () => {
+  const [form] = Form.useForm();
   const [restaurants, setRestaurants] = useState([] as Restaurant[]);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -29,14 +31,45 @@ const App = () => {
     }
   }
 
+  const onMenuItemCheck = (isChecked: boolean, itemPrice: number) => {
+    if (isChecked) {
+      setTotalPrice(totalPrice + itemPrice);
+    }
+    else {
+      setTotalPrice(totalPrice - itemPrice);
+    }
+  }
+
+  const onFormFinish = (values: any) => {
+    const ids = Object.entries<boolean>(values).filter(x => x[1] === true).map(x => parseInt(x[0], 10));
+    createOrder(ids)
+      .then(() => Modal.success({
+        content: (
+          <div>
+            <p>You order has been placed!</p>
+            <p>Leave the rest up to the chefs and our drivers!</p>
+          </div>
+        )
+      }))
+      .catch(() => { message.error("Sorry, something went wrong") });
+
+    form.resetFields();
+    setTotalPrice(0);
+  }
+
   return (
     <div className="app">
       <Input.Search placeholder="Taco in Cape Town" onSearch={onSearch} className="search-box" />
-      <Form>
-        {restaurants.map(x => <RestaurantItem item={x} key={x.id} />)}
-        <Button>{`Order - ${totalPrice}`}</Button>
+      <Form
+        form={form}
+        onFinish={onFormFinish}
+      >
+        {restaurants.map(x => <RestaurantItem onMenuItemCheck={onMenuItemCheck} item={x} key={x.id} />)}
+        <Row justify="center" align="middle" className="button-container">
+          <Button htmlType="submit" type="primary" className="order-button">{`Order - R${totalPrice}`}</Button>
+        </Row>
       </Form>
-    </div>
+    </div >
   );
 }
 
