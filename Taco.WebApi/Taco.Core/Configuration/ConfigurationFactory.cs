@@ -62,6 +62,15 @@ namespace Taco.Core
         public DataBaseSettings DataBase { get; set; }
 
         /// <summary>
+        ///     Gets or sets the Amazon S3 settings.
+        /// </summary>
+        ///
+        /// <value>
+        ///     The Amazon S3.
+        /// </value>
+        public AmazonS3Settings AmazonS3{ get; set; }
+
+        /// <summary>
         ///     Gets or sets the CORS origins.
         /// </summary>
         ///
@@ -83,6 +92,7 @@ namespace Taco.Core
                 ConnectionString = _configuration.GetConnectionString(DataBase.ConnectionStringName);
             }
 
+            AmazonS3 = GetConfigurationSectionInstance<AmazonS3Settings>(configuration, "AmazonS3Settings");
             CorsOrigins = configuration.GetSection("CorsOrigins").Get<string[]>();
         }
 

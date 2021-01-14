@@ -16,7 +16,7 @@ const RestaurantItem = ({ item, onMenuItemCheck }: IRestaurantItemProps) => {
                     height={100}
                     width={150}
                     preview={false}
-                    src={item.logoPath}
+                    src={process.env.REACT_APP_API_URL + "/image" + item.logoPath}
                 />
             </Col>
             <Col span={22}>

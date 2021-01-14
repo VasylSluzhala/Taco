@@ -64,7 +64,9 @@ const App = () => {
         form={form}
         onFinish={onFormFinish}
       >
-        {restaurants.map(x => <RestaurantItem onMenuItemCheck={onMenuItemCheck} item={x} key={x.id} />)}
+        <div className="menu-items-main-container">
+          {restaurants.map(x => <RestaurantItem onMenuItemCheck={onMenuItemCheck} item={x} key={x.id} />)}
+        </div>
         <Row justify="center" align="middle" className="button-container">
           <Button htmlType="submit" type="primary" className="order-button">{`Order - R${totalPrice}`}</Button>
         </Row>

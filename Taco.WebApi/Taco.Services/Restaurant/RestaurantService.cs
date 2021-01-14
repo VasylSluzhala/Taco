@@ -49,6 +49,8 @@ namespace Taco.Services.Restaurant
                 }
             }
 
+            restaurantList = restaurantList.OrderByDescending(x => x.Categories.SelectMany(x => x.MenuItems).Count()).ThenByDescending(x => x.Rank).ToList();
+
             return _mapper.Map<List<RestaurantDto>>(restaurantList);
         }
     }
